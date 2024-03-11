@@ -1,40 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
+    <form action='/user' method='post'>
 
-    <form action = '/user' method = 'post'>
-
-        ID : <input type = 'number' name = 'id'><br><br>
-        NAME : <input type = 'text' name = 'name'><br><br>
-        PASSWORD : <input type="text" name = 'password'><br><br>
-        PROFESSION : <input type = 'text' name = 'profession'><br><br>
+        ID : <input type='number' name='id'><br><br>
+        NAME : <input type='text' name='name'><br><br>
+        PASSWORD : <input type="text" name='password'><br><br>
+        PROFESSION : <input type='text' name='profession'><br><br>
         <button>SUBMIT</button>
     </form>
 
     <hr>
-    <button onclick = 'deleteUser()'>DELETE USER</button>
-    <div id = 'delDiv'></div>
+    <button onclick='deleteUser()'>DELETE USER</button>
+    <div id='delDiv'></div>
+
+    <hr><br>
+
+    <button onclick = 'updateUser()'>UPDATE USER</button>
+
+    <div id = 'editForm'>
+        <h3>UPDATE FORM</h3>
+        ID : <input type='number' name='id'><br><br>
+        NAME : <input type='text' name='name'><br><br>
+        PASSWORD : <input type="text" name='password'><br><br>
+        PROFESSION : <input type='text' name='profession'><br><br>
+        
+        <button onclick="handleEdit()">SUBMIT....</button>
+        <div id = 'editDiv'></div>
+    </div>
+
+    
+
+
+
+
     <script>
-        function deleteUser()
-        {
+
+        document.getElementById('editForm').style.display = 'none'
+
+        //======================================================================================
+
+
+        //=======================================================================================
+
+        function deleteUser() {
             let id = prompt('Enter the user_id to be deleted.');
 
             fetch('http://localhost:8080/user/' + id, {
-                method : 'DELETE'
+                method: 'DELETE'
             })
+                .then((response) => {
+
+                    document.getElementById('delDiv').innerHTML = 'Deleted user of id = ' + id;
+
+                })
+
+        }
+        function updateUser()
+        {
+            document.getElementById('editForm').style.display='inline'
+        }
+        function handleEdit()
+        {
+            let id = document.getElementsByName('id')[1].value;
+            let name = document.getElementsByName('name')[1].value;
+            let password = document.getElementsByName('password')[1].value;
+            let profession = document.getElementsByName('profession')[1].value
+           
+            let user = {id, name, password, profession};
+            let stringUser = JSON.stringify(user);
+            console.log(stringUser)
+            console.log(user)
+
+            fetch(
+                   'http://localhost:8080/user/' + id, 
+                    { 
+                        method : 'PUT',
+                        headers :  { 'Content-Type' : 'application/json'},
+                        body : stringUser 
+                    }
+                   
+                )
             .then((response)=>{
 
-                document.getElementById('delDiv').innerHTML = 'Deleted user of id = ' + id;
+                response.json()
+                .then((data)=>{
+
+                    console.log('DATA FROM SERVER...')
+                    console.log(data);
+                    document.getElementById('editDiv').innerHTML = "EDITTED SUCCESSFULLY"
+                    
+                })
 
             })
 
         }
     </script>
-    
+
 </body>
+
 </html>

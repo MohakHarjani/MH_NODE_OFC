@@ -19,7 +19,7 @@ app.get('/', (req, res) => { res.send('Hi from port 8080') })
 //it's important to add this route before "/user/:id" , otherwise /user/register would map to "/user/:id"
 app.get('/user/register', (req, res) => {
 
-    res.sendFile(path.join(__dirname, "views/userRegister.html"))
+    res.sendFile(path.join(__dirname, "views/bookRegister1.html"))
 
 })
 
@@ -91,7 +91,8 @@ app.post('/user', (req, res) => {
             res.status(400).send('<h1>HTTP POST FAILED..' + err.message + '</h1>')
         }
         else {
-            res.status(200).send('<h1>POSTED USER SUCCESSFULLY</h1');
+            res.redirect('/user/register')
+
         }
 
 
@@ -119,14 +120,14 @@ app.delete('/user/:id', (req, res) => {
 
 })
 //===============================================================================================================================
-app.put('/user/:id', (req, res)=>{
+app.put('/user/:id', (req, res) => {
     let id = req.params.id;
     console.log(id)
     const user = req.body;
     console.log(user);
-    
+
     const sql = 'update user set name = ?, password = ?, profession = ? where id = ?';
-    dbconn.query(sql, [user.name, user.password, user.profession, user.id], (err, result)=>{
+    dbconn.query(sql, [user.name, user.password, user.profession, user.id], (err, result) => {
 
         if (err) {
             console.log(err.message)

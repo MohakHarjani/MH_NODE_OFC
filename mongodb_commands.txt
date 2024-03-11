@@ -1,0 +1,39 @@
+
+use vwhall;
+
+db.movies.insertMany(
+[
+       {_id : 1, name : 'Dunki', rating : 8.2, director : 'Raju Hirani', release_date : new Date()},
+       {_id : 2, name : 'Jawan', rating : 9.1, director : 'Atlee', release_date : new Date()},
+       {_id : 3, name : '12th Fail', rating : 9.2, director : 'Vinod Chopra', release_date : new Date()},
+       {_id : 4, name : '3 idiots', rating : 9.4, director : 'Raju Hirani', release_date : new Date()}
+]
+)
+
+db.comments.insertMany(
+[
+   {_id : 100, author : 'Mohak', text : 'A nice movie', movie_id : 1},
+   {_id : 101, author : 'Rakshit', text : 'A decent watch', movie_id : 1},
+   {_id : 102, author : 'Akshit', text : 'Boring movie', movie_id : 1},
+   {_id : 103, author : 'Kartik', text : 'Only Action', movie_id : 2},
+   {_id : 104, author : 'Rahul', text : 'Nice movie', movie_id : 2},
+   {_id : 105, author : 'Rahul', text : 'Classic', movie_id : 4},
+   {_id : 106, author : 'Kshtij', text : 'Gem', movie_id : 3},
+   {_id : 107, author : 'Binod', text : 'Binod'}
+]
+)
+
+
+
+
+db.comments.aggregate([
+  {
+    $lookup: {
+      from: "movies",
+      localField: "movie_id",
+      foreignField: "_id",
+      as: "movie_details",
+    },
+  },
+])
+

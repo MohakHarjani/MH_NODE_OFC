@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, td, tr, th{
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id = 'userForm'>
+        <h2> USER POST FORM</h2>
+        <form action='/user' method='post'>
+
+            ID : <input type='number' name='id'><br><br>
+            NAME : <input type='text' name='name'><br><br>
+            PASSWORD : <input type="text" name='password'><br><br>
+            PROFESSION : <input type='text' name='profession'><br><br>
+            <button>SUBMIT</button>
+        </form>
+    </div>
+    <hr><br>
+    <!-- ========================================================================================= -->
+    <div id = 'userContainer'>
+        <h2>USER LIST</h2>
+        <table id = 'userTable'>
+            <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>User Password</th>
+                    <th>User Profession</th>
+                </tr>
+            </thead>
+            <tbody id = 'userTableBody'>
+
+            </tbody>
+
+        </table>
+    </div>
+    <!-- ========================================================================================================/ -->
+    <div id = 'editForm'>
+        <h3>UPDATE FORM</h3>
+        ID : <input type='number' name='id'><br><br>
+        NAME : <input type='text' name='name'><br><br>
+        PASSWORD : <input type="text" name='password'><br><br>
+        PROFESSION : <input type='text' name='profession'><br><br>
+        
+        <button onclick="updateUser()">SUBMIT....</button>
+        <div id = 'editDiv'></div>
+    </div>
+    <!-- ============================================================================================================/ -->
+    <script>
+
+         document.getElementById('editForm').style.display='none'
+         getAllUsers();
+
+        //=========================================================================================
+        function deleteUser(id)
+        {   
+            fetch('http://localhost:8080/user/' + id, {
+                method: 'DELETE'
+            })
+            .then((response) => {
+
+                window.location.reload();
+                
+
+
+            })
+        }
+        //=======================================================================================
+        function updateUser()
+        {
+            let id = document.getElementsByName('id')[1].value;
+            let name = document.getElementsByName('name')[1].value;
+            let password = document.getElementsByName('password')[1].value;
+            let profession = document.getElementsByName('profession')[1].value
+           
+            let user = {id, name, password, profession};
+            let stringUser = JSON.stringify(user);
+            console.log(stringUser)
+            console.log(user)
+
+            fetch(
+                   'http://localhost:8080/user/' + id, 
+                    { 
+                        method : 'PUT',
+                        headers :  { 'Content-Type' : 'application/json'},
+                        body : stringUser 
+                    }
+                   
+                )
+            .then((response)=>{
+
+                window.location.reload();
+            })
+           
+        }
+        //======================================================================================
+        function showEditForm()
+        {
+            document.getElementById('editForm').style.display='inline'
+
+        }
+        //================================================================================================
+        function populateTable(userList)
+        {
+            let userTableBody = document.getElementById('userTableBody');
+            
+            userList.map((user)=>{
+
+
+                let userTableRow = document.createElement("tr");
+
+                let userTableDescId = document.createElement('td')
+                userTableDescId.innerText = user.id;
+
+                let userTableDescName = document.createElement('td')
+                userTableDescName.innerText = user.name;
+
+                let userTableDescPassword = document.createElement('td')
+                userTableDescPassword.innerText = user.password;
+
+                let userTableDescProfession = document.createElement('td')
+                userTableDescProfession.innerText = user.profession;
+
+                //appending td in tr
+                userTableRow.append(userTableDescId);
+                userTableRow.append(userTableDescName);
+                userTableRow.append(userTableDescPassword);
+                userTableRow.append(userTableDescProfession);
+
+                let delTd = document.createElement('td')
+                delTd.innerHTML =`<button onclick = deleteUser(${user.id})> DELETE</button>`
+
+                let editButton = document.createElement('button')
+                editButton.innerText = 'EDIT';
+                editButton.onclick = showEditForm;
+                
+                //append buttons to tr
+                userTableRow.append(delTd);
+                userTableRow.append(editButton);
+
+                //appending tr in tbody
+                userTableBody.append(userTableRow);
+
+            })
+            
+        }
+        //==================================================================================================
+        function getAllUsers()
+        {
+            fetch('http://localhost:8080/user/all', {
+                method : 'GET'
+            })
+            .then((response)=>{
+                response.json()
+                        .then((userList)=>{
+
+                            populateTable(userList);
+
+
+                        })
+            })
+        }
+        //=============================================================================================
+    </script>
+
+</body>
+
+</html>

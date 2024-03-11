@@ -1,0 +1,25 @@
+install mongodb local community edition
+MongoDB Compass Download (GUI) - full version
+
+download and install mongosh (mongodb shell)
+https://www.mongodb.com/try/download/shell
+(MongoDB Shell is the quickest way to connect to (and work with) MongoDB. Easily query data, configure settings, and execute other actions with this modern, extensible command-line interface — replete with syntax highlighting, intelligent autocomplete, contextual help, and error messages.
+
+Note: MongoDB Shell is an open source (Apache 2.0), standalone product developed separately from the MongoDB Server.)
+
+open commandprompt and check
+mongosh --version
+to start mongosh type mongosh
+cmd>mongosh
+it will connect to database test.
+test>db.getMongo()
+to get the connection url, use to connect to database.
+https://www.mongodb.com/docs/mongodb-shell/run-commands/
+
+
+test>use my_db  //command to create a new database
+my_db>in your project folder npm install mongoose - node-mongodb package
+it allows to connect node application with mongodb.
+
+
+
