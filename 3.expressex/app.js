@@ -5,7 +5,7 @@ const path = require('path')
 
  app.use(express.urlencoded({extended:'true'}))
  app.use(express.json())
-
+7
 
 
 app.get('/index', (req, res)=>{

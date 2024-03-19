@@ -29,7 +29,6 @@ const server = http.createServer((req, res)=>{
         })
         const user = { name : 'Mohak', salary : 35000 };
         const userJsonString = JSON.stringify(user);
-
         res.end(userJsonString)  //we can send only string/buffer in res.end()...cannot send obj directly
     }
     else if (url === '/userForm')
